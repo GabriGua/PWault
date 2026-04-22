@@ -17,7 +17,11 @@ def save_vault(entries, key, path):
     with open(path, "rb") as f:
         content = f.read()
     salt = content[:16]
-    file = [asdict(e) for e in entries]
+    file = []  
+    for e in entries:
+        d = asdict(e)
+        d["id"] = str(d["id"])
+        file.append(d)
     json_data = json.dumps(file)
     encoded = json_data.encode()
     blob = encrypt(encoded, key)

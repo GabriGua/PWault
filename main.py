@@ -1,15 +1,30 @@
-from core.crypto import derive_key, encrypt, decrypt
+from cli.commands import init, add, list_entries, get, delete
 import os
+import argparse
 
-salt = os.urandom(12)
+parser = argparse.ArgumentParser()
+subparsers = parser.add_subparsers(dest="commands")
+subparsers.add_parser("init")
+subparsers.add_parser("add")
+subparsers.add_parser("list_entries")
+get_parser = subparsers.add_parser("get")
+get_parser.add_argument("name")
+getdel_parser = subparsers.add_parser("delete")
+getdel_parser.add_argument("name")
 
-secret = input("metti master password ")
-key = derive_key(secret, salt)
+args = parser.parse_args()
 
-data = input("stringa di prova ")
+if args.commands == "init":
+    init()
 
-blob = encrypt(data.encode(), key)
-print(blob)
+elif args.commands == "add":
+    add()
 
-pw = decrypt(blob, key)
-print(pw.decode())
+elif args.commands == "list_entries":
+    list_entries()
+    
+elif args.commands == "get":
+    get(args.name)
+
+elif args.commands == "delete":
+    delete(args.name)
