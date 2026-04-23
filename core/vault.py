@@ -39,3 +39,4 @@ def load_vault(key, path):
     json_list = json.loads(decoded)
     listE = [Entry(**d) for d in json_list]
     return listE
+    

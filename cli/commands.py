@@ -10,9 +10,7 @@ VAULT_PATH = os.path.join(os.environ["APPDATA"], "PWault", "vault.bin")
 
 def init():
     
-    if(os.path.exists(VAULT_PATH)):
-        print("vault already exists")
-    else:
+    
         os.makedirs(os.path.dirname(VAULT_PATH), exist_ok=True)
         pw = getpass.getpass()
         try_pw = getpass.getpass()
@@ -25,13 +23,8 @@ def init():
         else:
             print("passwords do not match, try again")
            
-def add():
-    pw = getpass.getpass()
-    with open(VAULT_PATH, "rb") as f:
-        content = f.read()
-    salt = content[:16]
-    key = derive_key(pw, salt)
-    entries = load_vault(key, VAULT_PATH)
+def add(entries, key):
+    
     
     name = input("name of the service: ")
     username = input("username (optional): ") or None
@@ -43,24 +36,11 @@ def add():
     print("saved successfully")
 
 
-def list_entries():
-    pw = getpass.getpass()
-    with open(VAULT_PATH, "rb") as f:
-        content = f.read()
-    salt = content[:16]
-    key = derive_key(pw, salt)
-    entries = load_vault(key, VAULT_PATH)
-
+def list_entries(entries):
     for entry in entries:
         print(entry.name)
 
-def get(name):
-    pw = getpass.getpass()
-    with open(VAULT_PATH, "rb") as f:
-        content = f.read()
-    salt = content[:16]
-    key = derive_key(pw, salt)
-    entries = load_vault(key, VAULT_PATH)
+def get(name, entries):
 
     for entry in entries:
         if entry.name == name:
@@ -74,13 +54,13 @@ def get(name):
         print("not found")
 
 
-def delete(name):
+def delete(name, entries):
     pw = getpass.getpass()
     with open(VAULT_PATH, "rb") as f:
         content = f.read()
     salt = content[:16]
     key = derive_key(pw, salt)
-    entries = load_vault(key, VAULT_PATH)
+    
 
     for entry in entries:
         if entry.name == name:
