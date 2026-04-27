@@ -3,7 +3,7 @@ import getpass
 from core.crypto import derive_key, encrypt, decrypt
 from core.vault import create_vault, save_vault, load_vault
 from core.models import Entry
-
+import pyperclip
 
 
 VAULT_PATH = os.path.join(os.environ["APPDATA"], "PWault", "vault.bin")
@@ -47,27 +47,27 @@ def get(name, entries):
             print(f"name: {entry.name}")
             print(f"username: {entry.username or 'N/A'}")
             print(f"password: {entry.password}")
+            pyperclip.copy(entry.password)
             print(f"notes: {entry.notes or 'N/A'}")
+            print("pw copied into clipboard!")
             break
 
     else:
         print("not found")
 
 
-def delete(name, entries):
-    pw = getpass.getpass()
-    with open(VAULT_PATH, "rb") as f:
-        content = f.read()
-    salt = content[:16]
-    key = derive_key(pw, salt)
+def delete(name, entries, key):
     
-
-    for entry in entries:
-        if entry.name == name:
-            entries.remove(entry)
-            save_vault(entries, key, VAULT_PATH)
-            print("deleted successfully")
-            break
+    next = input("Are you sure you want to delete" + name + "? (yes/no): ")
+    if next.lower() == "yes":
+        for entry in entries:
+            if entry.name == name:
+                entries.remove(entry)
+                save_vault(entries, key, VAULT_PATH)
+                print("deleted successfully")
+                break
+            else:
+                print("not found")
     else:
-        print("not found")
+        print("operation cancelled")
     

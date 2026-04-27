@@ -2,8 +2,10 @@ from cli.commands import init, add, list_entries, get, delete, VAULT_PATH
 from core.crypto import derive_key, encrypt, decrypt
 from core.vault import create_vault, save_vault, load_vault
 from core.models import Entry
+from utils.generator import PassGenerator
 import os
 import getpass
+import pyperclip
 
 
 
@@ -16,6 +18,7 @@ if(os.path.exists(VAULT_PATH)):
     key = derive_key(pw, salt)
     entries = load_vault(key, VAULT_PATH)
     onLine = True
+    os.system('cls')
     print("Welcome to your vault") 
     while(onLine == True):
         
@@ -33,9 +36,28 @@ if(os.path.exists(VAULT_PATH)):
         
         elif(command == "Delete" or command == "delete"):
             name = input("Enter the name: ")
-            delete(name, entries)
+            delete(name, entries, key)
+
+        elif(command == "Gen" or command == "gen"):
+            
+            try: 
+                length = int(input("Insert the password length: "))
+                result = PassGenerator(length)
+                print(result)
+                pyperclip.copy(result)
+                print("copied into clipboard!")
+                os.system('pause')
+                os.system('cls')
+
+            except:
+                print("you didn't enter a number")
+            
+        
         elif(command == "Exit" or command == "exit"):
             onLine = False
+
+        
+
 
     print("Logout Successfull")
     
