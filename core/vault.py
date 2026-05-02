@@ -32,11 +32,9 @@ def save_vault(entries, key, path):
 def load_vault(key, path):
     with open(path, "rb") as f:
         content = f.read()
-    salt = content[:16]
     blob = content[16:]
     pw = decrypt(blob, key)
     decoded = pw.decode()
     json_list = json.loads(decoded)
     listE = [Entry(**d) for d in json_list]
     return listE
-    

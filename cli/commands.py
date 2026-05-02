@@ -19,55 +19,87 @@ def init():
 
            key = derive_key(pw, salt)
            create_vault(key, VAULT_PATH, salt)
-           print("Init successful!")
+           print("[✓] Init successful!")
         else:
-            print("passwords do not match, try again")
+            print("[✗] passwords do not match, try again")
            
 def add(entries, key):
     
     
-    name = input("name of the service: ")
+    
+    while True:
+        name = input("name of the service: ")
+        if name != None:
+
+            break
+
     username = input("username (optional): ") or None
-    password = getpass.getpass("password: ")
+    while True:
+        password = getpass.getpass("password: ")
+        if password != "":
+
+            break
+    
+
+    
     notes = input("notes (optional): ") or None
     entry = Entry(name = name, username = username, password = password, notes = notes)
     entries.append(entry)
     save_vault(entries, key, VAULT_PATH)
-    print("saved successfully")
+    print("[✓] saved successfully")
+    os.system('pause')
+    os.system('cls')
+    
 
 
 def list_entries(entries):
     for entry in entries:
         print(entry.name)
+        os.system('pause')
+        os.system('cls')
+    
 
 def get(name, entries):
 
     for entry in entries:
         if entry.name == name:
-            print(f"name: {entry.name}")
+            print("─" * 40)
             print(f"username: {entry.username or 'N/A'}")
             print(f"password: {entry.password}")
             pyperclip.copy(entry.password)
             print(f"notes: {entry.notes or 'N/A'}")
-            print("pw copied into clipboard!")
+            print("[✓] pw copied into clipboard!")
+            os.system('pause')
+            os.system('cls')
             break
 
     else:
-        print("not found")
+        print("[✗] not found")
+        os.system('pause')
+        os.system('cls')
+    
 
 
 def delete(name, entries, key):
     
-    next = input("Are you sure you want to delete" + name + "? (yes/no): ")
+    next = input("Are you sure you want to delete " + name + "? (yes/no): ")
     if next.lower() == "yes":
         for entry in entries:
             if entry.name == name:
                 entries.remove(entry)
                 save_vault(entries, key, VAULT_PATH)
-                print("deleted successfully")
+                print("[✓] deleted successfully")
+                os.system('pause')
+                os.system('cls')
                 break
-            else:
-                print("not found")
+        else:
+            print("[✗] not found")
+            os.system('pause')
+            os.system('cls')
+
+
     else:
-        print("operation cancelled")
+        print("[✗] operation cancelled")
+        os.system('pause')
+        os.system('cls')
     
