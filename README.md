@@ -40,6 +40,7 @@ If you would like to contribute to PWault:
 5. Open a pull request
 
 Bug reports, feature requests, and suggestions are also welcome through GitHub Issues.
+See requirements.txt for more information.
 
 ## AI Assistance
 Python was nothing new to me; cryptography, however, was. 
