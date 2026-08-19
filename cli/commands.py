@@ -12,6 +12,7 @@ def init():
     
     
         os.makedirs(os.path.dirname(VAULT_PATH), exist_ok=True)
+        print("Welcome to PWault, create your vault using a password, at the end reopen the application")
         pw = getpass.getpass()
         try_pw = getpass.getpass()
         if(pw == try_pw):
